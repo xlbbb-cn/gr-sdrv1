@@ -1,0 +1,105 @@
+id: sdrv1_sdrv1_sink
+label: sdrv1_sink
+category: '[sdrv1]'
+flags: [ python, throttle ]
+
+
+
+templates:
+  imports: from gnuradio import sdrv1
+  make: |-
+    sdrv1.sdrv1_sink(${ip}, '${channel}', ${buf_len})
+    self.${id}.set_lo(${lo})
+    self.${id}.set_fs(${fs})
+    self.${id}.set_bw(${bw})
+    self.${id}.set_tx_gain(${gain})
+  callbacks:
+    - set_tx_gain(${gain})
+    - set_fs(${fs})
+    - set_bw(${bw})
+    - set_lo(${lo})
+    
+
+#  Make one 'parameters' list entry for every parameter you want settable from the GUI.
+#     Keys include:
+#     * id (makes the value accessible as keyname, e.g. in the make entry)
+#     * label (label shown in the GUI)
+#     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
+#     * default
+parameters:
+  - id: ip
+    label: target board ip
+    dtype: string
+    hide: ${'part' if not ip else 'none'}
+  - id: channel
+    label: Channel Select
+    dtype: enum
+    options: [tx1, tx2]
+    option_labels: [tx1, tx2]
+    option_attributes:
+      type: [tx1, tx2]
+    hide: none
+  - id: buf_len
+    label: 'Buffer Size'
+    dtype: real
+    default: '8192'
+    hide: part
+  - id: gain
+    label: 'IF Annt(0dB - 43dB)'
+    category: RF Options
+    dtype: real
+    default: '16'
+    hide: part
+  - id: fs
+    label: 'sample rate(Hz)'
+    category: RF Options
+    dtype: float
+    default: '2e6'
+    hide: part 
+  - id: bw
+    label: 'analog filter(Hz)'
+    category: RF Options
+    dtype: float
+    default: '2e6'
+    hide: part
+  - id: lo
+    label: 'frequency(50Mhz-5Ghz)'
+    category: RF Options
+    dtype: float
+    default: '110e6'
+    hide: part
+
+asserts:
+  - ${ fs < 40e6 }
+  - ${ bw < 40e6 }
+  - ${ ((lo < 5000e6) and ( lo>50e6)) }
+  - ${ ((gain <= 43) and ( gain>=0)) }
+
+#- id: ...
+#  label: ...
+#  dtype: ...
+
+#  Make one 'inputs' list entry per input and one 'outputs' list entry per output.
+#  Keys include:
+#      * label (an identifier for the GUI)
+#      * domain (optional - stream or message. Default is stream)
+#      * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
+#      * vlen (optional - data stream vector length. Default is 1)
+#      * optional (optional - set to 1 for optional inputs. Default is 0)
+inputs:
+  - domain: stream
+    dtype: fc32
+
+# asserts:
+#   - ${ buffer_size < 4096 }
+  
+# outputs:
+#- label: ...
+#  domain: ...
+#  dtype: ...
+#  vlen: ...
+#  optional: ...
+
+#  'file_format' specifies the version of the GRC yml format used in the file
+#  and should usually not be changed.
+file_format: 1

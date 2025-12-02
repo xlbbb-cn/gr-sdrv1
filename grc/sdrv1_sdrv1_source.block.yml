@@ -1,0 +1,131 @@
+id: sdrv1_sdrv1_source
+label: sdrv1_source
+category: '[sdrv1]'
+flags: [ python, throttle ]
+
+
+#  Make one 'parameters' list entry for every parameter you want settable from the GUI.
+#     Keys include:
+#     * id (makes the value accessible as keyname, e.g. in the make entry)
+#     * label (label shown in the GUI)
+#     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
+#     * default
+parameters:
+  - id: type
+    label: Output Type
+    dtype: enum
+    options: [fc32]
+    option_labels: [Complex float32]
+    option_attributes:
+        type: [fc32]
+    hide: part
+  - id: ip
+    label: target board ip
+    dtype: string
+    hide: ${'part' if not ip else 'none'}
+  - id: channel
+    label: Channel Select
+    category: RF Options
+    dtype: enum
+    options: [rx1, rx2]
+    option_labels: [Rx1, Rx2]
+    option_attributes:
+      type: [rx1, rx2]
+    hide: none
+  - id: buf_len
+    label: 'Buffer Size'
+    dtype: real
+    default: '8192'
+    hide: part
+  - id: gain
+    label: 'IF Gain (-2dB - 77dB)'
+    category: RF Options
+    dtype: real
+    default: '-2'
+    hide: part
+  - id: fs
+    label: 'sample rate(Hz)'
+    category: RF Options
+    dtype: float
+    default: '2e6'
+    hide: part 
+  - id: bw
+    label: 'analog filter(Hz)'
+    category: RF Options
+    dtype: float
+    default: '2e6'
+    hide: part
+  - id: lo
+    label: 'frequency(50Mhz-5Ghz)'
+    category: RF Options
+    dtype: float
+    default: '110e6'
+    hide: part
+
+asserts:
+  - ${ fs < 40e6 }
+  - ${ bw < 40e6 }
+  - ${ ((lo < 5000e6) and ( lo>50e6)) }
+  - ${ ((gain <= 77) and ( gain>=-2)) }
+#- id: ...
+#  label: ...
+#  dtype: ...
+
+#  Make one 'inputs' list entry per input and one 'outputs' list entry per output.
+#  Keys include:
+#      * label (an identifier for the GUI)
+#      * domain (optional - stream or message. Default is stream)
+#      * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
+#      * vlen (optional - data stream vector length. Default is 1)
+#      * optional (optional - set to 1 for optional inputs. Default is 0)
+# inputs:
+#- label: ...
+#  domain: ...
+#  dtype: ...
+#  vlen: ...
+#  optional: ...
+
+outputs:
+  - domain: stream
+    dtype: ${type.type}
+
+
+
+templates:
+  imports: from gnuradio import sdrv1
+  make: |-
+    sdrv1.sdrv1_source_${type.type}(${ip}, '${channel.type}',${buf_len})
+    self.${id}.set_lo(${lo})
+    self.${id}.set_fs(${fs})
+    self.${id}.set_bw(${bw})
+    self.${id}.set_rx_gain(${gain})
+  callbacks:
+    - set_rx_gain(${gain})
+    - set_fs(${fs})
+    - set_bw(${bw})
+    - set_lo(${lo})
+# templates:
+#     imports: from gnuradio import iio
+#     make: |
+#         iio.fmcomms2_source_${type.type}(${uri} if ${uri} else iio.get_pluto_uri(), [True, True], ${buf_len})
+#         self.${id}.set_len_tag_key(${len_tag_key})
+#         self.${id}.set_frequency(${frequency})
+#         self.${id}.set_samplerate(${samplerate})
+#         self.${id}.set_gain_mode(0, ${gain1})
+#         self.${id}.set_gain(0, ${manual_gain1})
+#         self.${id}.set_quadrature(${quadrature})
+#         self.${id}.set_rfdc(${rfdc})
+#         self.${id}.set_bbdc(${bbdc})
+#         self.${id}.set_filter_params(${filter_source}, ${filter}, ${fpass}, ${fstop})
+#     callbacks:
+#         - set_frequency(${frequency})
+#         - set_samplerate(${samplerate})
+#         - set_gain_mode(0, ${gain1})
+#         - set_gain(0, ${manual_gain1})
+#         - set_quadrature(${quadrature})
+#         - set_rfdc(${rfdc})
+#         - set_bbdc(${bbdc})
+#         - set_filter_params(${filter_source}, ${filter}, ${fpass}, ${fstop})
+#  'file_format' specifies the version of the GRC yml format used in the file
+#  and should usually not be changed.
+file_format: 1
