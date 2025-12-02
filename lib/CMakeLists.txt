@@ -23,7 +23,15 @@ if(NOT sdrv1_sources)
 endif(NOT sdrv1_sources)
 
 add_library(gnuradio-sdrv1 SHARED ${sdrv1_sources})
-target_link_libraries(gnuradio-sdrv1 gnuradio::gnuradio-runtime libiio::iio)
+# libiio imported target name may vary across environments; try common variants
+if(TARGET libiio::iio)
+    target_link_libraries(gnuradio-sdrv1 gnuradio::gnuradio-runtime libiio::iio)
+elseif(TARGET iio::iio)
+    target_link_libraries(gnuradio-sdrv1 gnuradio::gnuradio-runtime iio::iio)
+else()
+    find_library(LIBIIO_LIB iio)
+    target_link_libraries(gnuradio-sdrv1 gnuradio::gnuradio-runtime ${LIBIIO_LIB})
+endif()
 target_include_directories(
     gnuradio-sdrv1
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>

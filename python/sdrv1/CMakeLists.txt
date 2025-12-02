@@ -30,12 +30,14 @@ include(GrTest)
 
 set(GR_TEST_TARGET_DEPS gnuradio-sdrv1)
 
-# Create a package directory that tests can import. It includes everything
-# from `python/`.
-add_custom_target(
-    copy_module_for_tests ALL
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}
-            ${PROJECT_BINARY_DIR}/test_modules/gnuradio/sdrv1/)
-# GR_ADD_TEST(qa_sdrv1_source ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_sdrv1_source.py)
-# GR_ADD_TEST(qa_sdrv1_sink ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_sdrv1_sink.py)
-GR_ADD_TEST(qa_sdrv1stream_sink ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_sdrv1stream_sink.py)
+if(ENABLE_TESTING)
+    # Create a package directory that tests can import. It includes everything
+    # from `python/`.
+    add_custom_target(
+        copy_module_for_tests ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}
+                ${PROJECT_BINARY_DIR}/test_modules/gnuradio/sdrv1/)
+    # GR_ADD_TEST(qa_sdrv1_source ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_sdrv1_source.py)
+    # GR_ADD_TEST(qa_sdrv1_sink ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_sdrv1_sink.py)
+    GR_ADD_TEST(qa_sdrv1stream_sink ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_sdrv1stream_sink.py)
+endif()

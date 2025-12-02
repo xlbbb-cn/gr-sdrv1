@@ -1,0 +1,35 @@
+name: conda-build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          channels: conda-forge
+          channel-priority: strict
+          python-version: '3.11'
+
+      - name: Install conda-build
+        shell: bash -l {0}
+        run: |
+          conda install -y conda-build boa anaconda-client
+
+      - name: Build recipe
+        shell: bash -l {0}
+        run: |
+          conda mambabuild recipe -c conda-forge

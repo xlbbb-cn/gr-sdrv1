@@ -22,6 +22,8 @@ cmake_policy(SET CMP0148 OLD) ## 使用旧方法寻找python
 cmake_policy(SET CMP0167 OLD) ## 使用旧方法寻
 project(gr-sdrv1 CXX C)
 enable_testing()
+# Enable Python/GRC components by default (can be turned OFF for pure-C++)
+option(ENABLE_PYTHON "Build Python and GRC components" ON)
 
 # Install to PyBOMBS target prefix if defined
 if(DEFINED ENV{PYBOMBS_PREFIX})
@@ -34,12 +36,17 @@ if(DEFINED ENV{PYBOMBS_PREFIX})
     )
 endif()
 
-#ref:https://wiki.gnuradio.org/index.php/CondaInstall#Building_OOT_modules_to_use_with_conda-installed_GNU_Radio
+# ref: https://wiki.gnuradio.org/index.php/CondaInstall#Building_OOT_modules_to_use_with_conda-installed_GNU_Radio
+# Local dev helper for Windows Miniforge. OFF by default and should NOT be used in packaging.
+option(SDRV1_DEV_WIN_PREFIX "Use hardcoded Miniforge prefix for local dev on Windows" OFF)
+if (WIN32 AND SDRV1_DEV_WIN_PREFIX)
+    set(CMAKE_INSTALL_PREFIX "C:/Applications/miniforge3/envs/gnuradio/Library" CACHE PATH "" FORCE)
+    set(CMAKE_PREFIX_PATH "C:/Applications/miniforge3/envs/gnuradio/Library" CACHE PATH "" FORCE)
+    set(GR_PYTHON_DIR "C:/Applications/miniforge3/envs/gnuradio/Lib/site-packages" CACHE PATH "" FORCE)
+endif()
 
-set(CMAKE_INSTALL_PREFIX "C:/Applications/miniforge3/envs/gnuradio/Library")
-set(CMAKE_PREFIX_PATH "C:/Applications/miniforge3/envs/gnuradio/Library")
-set(GR_PYTHON_DIR "C:/Applications/miniforge3/envs/gnuradio/Lib/site-packages")
-set(ENABLE_TESTING OFF)
+# Allow packaging to control testing explicitly
+option(ENABLE_TESTING "Enable building/running tests" OFF)
 # cmake_policy(SET CMP0148 NEW)
 
 # Make sure our local CMake Modules path comes first
