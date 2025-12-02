@@ -139,14 +139,7 @@ sudo cmake --install .
 
 ## LICENSE 说明
 
-仓库根目录的 `LICENSE` 文件为 MIT License；同时，源码头部的 SPDX 标注为 `GPL-3.0-or-later`。这两者存在不一致。
-
-- 若项目采用单一许可证，请在仓库中统一：
-	- 要么更新 LICENSE 文件为 GPL-3.0-or-later；
-	- 要么将各源码头部 SPDX 标注改为 MIT，并保留 MIT LICENSE 文件。
-- 若计划双许可证（dual-licensing），请在 README 与 LICENSE 中明确说明授权策略与适用范围。
-
-在未统一前，依照法务保守策略，建议以更严格的条款（GPL-3.0-or-later）对待源文件使用与再分发；MIT 条款则对整体仓库提出更宽松的授权。请尽快确认并统一。
+本项目已统一为 GPL-3.0-or-later，并在源码文件头部以 SPDX 标识声明。根目录 `LICENSE` 已提供对应的许可文本；conda-forge 配方已设置 `license: GPL-3.0-or-later` 与 `license_file: LICENSE`。
 
 
 ## 兼容性与常见问题

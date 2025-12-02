@@ -19,9 +19,14 @@ add_subdirectory(bindings)
 ########################################################################
 # Install python sources
 ########################################################################
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/_version.py.in
+               ${CMAKE_CURRENT_BINARY_DIR}/_version.py @ONLY)
+
 gr_python_install(FILES __init__.py
     sdrv1_source.py
-    sdrv1_sink.py DESTINATION ${GR_PYTHON_DIR}/gnuradio/sdrv1)
+    sdrv1_sink.py
+    ${CMAKE_CURRENT_BINARY_DIR}/_version.py
+    DESTINATION ${GR_PYTHON_DIR}/gnuradio/sdrv1)
 
 ########################################################################
 # Handle the unit tests

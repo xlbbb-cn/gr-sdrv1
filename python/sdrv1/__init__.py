@@ -22,3 +22,9 @@ except ImportError:
     
 from .sdrv1_sink import sdrv1_sink
 from .sdrv1_source import sdrv1_source_fc32
+
+# Expose package version
+try:
+    from ._version import __version__
+except Exception:
+    __version__ = "0+unknown"

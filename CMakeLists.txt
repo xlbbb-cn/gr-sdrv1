@@ -20,7 +20,7 @@ set(CMAKE_BUILD_TYPE
 cmake_minimum_required(VERSION 3.8...3.14)
 cmake_policy(SET CMP0148 OLD) ## 使用旧方法寻找python
 cmake_policy(SET CMP0167 OLD) ## 使用旧方法寻
-project(gr-sdrv1 CXX C)
+project(gr-sdrv1 VERSION 1.0.0 LANGUAGES C CXX)
 enable_testing()
 # Enable Python/GRC components by default (can be turned OFF for pure-C++)
 option(ENABLE_PYTHON "Build Python and GRC components" ON)

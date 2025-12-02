@@ -9,5 +9,10 @@
 ########################################################################
 # Install public header files
 ########################################################################
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/version.h @ONLY)
+
 install(FILES api.h
-    sdrv1stream_sink.h DESTINATION include/gnuradio/sdrv1)
+    sdrv1stream_sink.h
+    ${CMAKE_CURRENT_BINARY_DIR}/version.h
+    DESTINATION include/gnuradio/sdrv1)
