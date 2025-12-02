@@ -1,3 +1,4 @@
+
 {% set name = "gnuradio-sdrv1" %}
 {% set version = "1.0.0" %}  # Update to your tagged release
 
@@ -8,50 +9,46 @@ package:
 source:
   # For conda-forge staged-recipes, prefer a tarball URL + sha256
   url: https://github.com/xlbbb-cn/gr-sdrv1/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 00000000000000000000000000000000 v00000000000000000000000000000000  # REPLACE
- v
-build: v
-  number: 0 v
-  # compiled extension + python module ->  vplatform-specific
-  script: v
-    - bash -ex recipe/build.sh  # [unix] v
-    - call recipe\bld.bat       # [win] v
- v
-requirements: v
-  build: v
-    - {{ compiler('c') }} v
-    - {{ compiler('cxx') }} v
-    - cmake v
-    - ninja v
-    - pkg-config v
-    - python v
-    - pybind11 v
-    - pygccxml v
-  host: v
-    - python v
-    - gnuradio v
-    - libiio v
-    - numpy v
-    - pylibiio v
-  run: v
-    - python v
-    - gnuradio v
-    - libiio v
-    - numpy v
-    - pylibiio v
- v
-test: v
-  commands: v
-    - python -c "import gnuradio, gnuradio v.sdrv1; print(getattr(gnuradio.sdrv1, '__doc__', '')[:10])"
- v
-about: v
-  home: https://github.com/xlbbb-cn/gr-sdr vv1
-  summary: GNU Radio OOT module for SDRV1  vhardware via libiio
-  description: | v
-    gr-sdrv1 提供 SDRV1 设备的收发块（C++/ vPython）和 GRC 支持，使用 libiio 与设备通信。
-  license: GPL-3.0-or-later v
-  license_file: LICENSE v
-  doc_url: https://github.com/xlbbb-cn/gr- vsdrv1
+  sha256: 00000000000000000000000000000000 00000000000000000000000000000000  # REPLACE
+build:
+  number: 0
+  # compiled extension + python module -> platform-specific
+  script:
+    - bash -ex recipe/build.sh  # [unix]
+    - call recipe\bld.bat       # [win]
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - cmake
+    - ninja
+    - pkg-config
+    - python
+    - pybind11
+    - pygccxml
+  host:
+    - python
+    - gnuradio
+    - libiio
+    - numpy
+    - pylibiio
+  run:
+    - python
+    - gnuradio
+    - libiio
+    - numpy
+    - pylibiio
+test:
+  commands:
+    - python -c "import gnuradio, gnuradio.sdrv1; print(getattr(gnuradio.sdrv1, '__doc__', '')[:10])"
+about:
+  home: https://github.com/xlbbb-cn/gr-sdrv1
+  summary: GNU Radio OOT module for SDRV1 hardware via libiio
+  description: |
+    gr-sdrv1 提供 SDRV1 设备的收发块（C++/Python）和 GRC 支持，使用 libiio 与设备通信。
+  license: GPL-3.0-or-later
+  license_file: LICENSE
+  doc_url: https://github.com/xlbbb-cn/gr-sdrv1
   dev_url: https://github.com/xlbbb-cn/gr-sdrv1
 
 extra:
